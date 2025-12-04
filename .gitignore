@@ -1,0 +1,24 @@
+# Workflow folders - keep these local only
+form-scoping/
+call-scoping/
+
+# Environment files
+.env
+*.env
+
+# Node modules (if any)
+node_modules/
+
+# Local development data
+.n8n/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+

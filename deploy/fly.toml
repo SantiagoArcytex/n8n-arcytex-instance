@@ -1,0 +1,45 @@
+# Fly.io configuration for n8n deployment
+# Run: fly launch (first time) or fly deploy (updates)
+
+app = "n8n-playground"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  N8N_BASIC_AUTH_ACTIVE = "false"
+  DB_TYPE = "postgresdb"
+  N8N_PROTOCOL = "https"
+  N8N_SECURE_COOKIE = "true"
+  N8N_PORT = "5678"
+  N8N_MFA_ENABLED = "true"
+
+[[services]]
+  internal_port = 5678
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+    force_https = true
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [services.http_checks]
+    interval = "10s"
+    timeout = "2s"
+    grace_period = "5s"
+    method = "GET"
+    path = "/healthz"
+
+[[mounts]]
+  source = "n8n_data"
+  destination = "/home/node/.n8n"
+
