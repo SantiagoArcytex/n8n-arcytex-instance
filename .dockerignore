@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!deploy/README.md
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Node modules (not needed in container)
+node_modules/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Build artifacts
+dist/
+build/
+*.map
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Deployment files (keep only what's needed)
+.cursor/
+plans/
+
