@@ -64,24 +64,37 @@ This guide focuses on deploying n8n Community Edition with **multi-user support*
 2. **Create New Project**:
    - Click "New Project"
    - Select "Deploy from GitHub repo"
-   - Choose your repository
-   - **Important:** Railway will deploy from the root. You need to configure it to use the `deploy/` folder (see next step)
+   - Choose your repository: `SantiagoArcytex/n8n-arcytex-instance`
+   - Railway will start analyzing your repository
 
-3. **Add PostgreSQL Service** (Required for Multi-User):
+3. **Fix Railway Build Detection**:
+   - Railway might show an error about not finding a build method (Railpack error)
+   - This is normal - we need to configure it to use Docker
+   - Click on the service that was created
+   - Go to the "Settings" tab
+   - Scroll down to "Build & Deploy" section
+   - Under "Build Command", select "Docker" or "Use Dockerfile"
+   - Set **Root Directory** to: `deploy` (this tells Railway to use `deploy/Dockerfile`)
+   - OR alternatively, if Root Directory option isn't available:
+     - Go to "Variables" tab first (we'll come back to build settings)
+     - The `railway.json` in root should help Railway find the Dockerfile
+
+4. **Add PostgreSQL Service** (Required for Multi-User):
    - In your Railway project, click "+ New"
    - Select "Database" → "Add PostgreSQL"
    - Railway will automatically create a PostgreSQL instance
    - Note: Railway provides connection variables automatically
 
-4. **Configure n8n Service**:
-   - Railway will auto-detect a Dockerfile, but it's in the `deploy/` folder
-   - Click on the n8n service to configure it
+5. **Configure n8n Service Build**:
+   - Click on the n8n service again
    - Go to "Settings" tab
-   - Under "Build & Deploy", set:
-     - **Root Directory:** `deploy`
-     - This tells Railway to look for the Dockerfile in the `deploy/` folder
+   - Under "Build & Deploy":
+     - **Build Command:** Select "Docker" or ensure it's set to use Dockerfile
+     - **Root Directory:** Set to `deploy` (if the option is available)
+     - If Root Directory option doesn't exist, the `railway.json` in root should handle it
+   - Save the settings
 
-5. **Set Environment Variables**:
+6. **Set Environment Variables**:
    - Go to "Variables" tab in the n8n service
    - Add the following required variables:
 
@@ -119,13 +132,13 @@ This guide focuses on deploying n8n Community Edition with **multi-user support*
    N8N_SMTP_SECURE=false
    ```
 
-6. **Generate Encryption Key**:
+7. **Generate Encryption Key**:
    ```bash
    openssl rand -base64 32
    ```
    Copy the output and set it as `N8N_ENCRYPTION_KEY`
 
-7. **Configure SMTP** (Required for User Invitations):
+8. **Configure SMTP** (Required for User Invitations):
    
    **Option A: Gmail (Recommended for MVP)**
    - Go to your Google Account → Security → 2-Step Verification
@@ -144,7 +157,7 @@ This guide focuses on deploying n8n Community Edition with **multi-user support*
    - Configure AWS SES SMTP credentials
    - Use your SES SMTP endpoint (e.g., `email-smtp.us-east-1.amazonaws.com`)
 
-8. **Set Webhook URL** (after deployment):
+9. **Set Webhook URL** (after deployment):
    - Railway will provide a URL like: `https://your-app-name.up.railway.app`
    - Go to "Variables" and set:
      ```
@@ -152,17 +165,17 @@ This guide focuses on deploying n8n Community Edition with **multi-user support*
      N8N_HOST=your-app-name.up.railway.app
      ```
 
-9. **Add Persistent Volume**:
+10. **Add Persistent Volume**:
    - Go to "Volumes" tab
    - Click "Add Volume"
    - Mount path: `/home/node/.n8n`
    - This stores workflows, credentials, and execution data
 
-10. **Deploy**:
+11. **Deploy**:
     - Railway will automatically build and deploy
     - Wait for deployment to complete (2-5 minutes)
 
-11. **Access Your Instance**:
+12. **Access Your Instance**:
     - Click on the service
     - Click "Generate Domain" if not already done
     - Visit the URL - you'll be prompted to create the **Owner account** (first admin user)
