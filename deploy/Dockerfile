@@ -1,8 +1,8 @@
 FROM n8nio/n8n:1.82.1
 
-WORKDIR /home/node
+USER root
 
-RUN mkdir -p /home/node/.n8n/files
+RUN mkdir -p /home/node/.n8n/files && chown -R node:node /home/node/.n8n
 
 EXPOSE 5678
 
